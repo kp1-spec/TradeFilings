@@ -1,0 +1,7 @@
+{
+  "years": [2026],
+  "alert_min_amount": 50001,
+  "watch_tickers": [],
+  "email_when_empty": false,
+  "max_new_filings_per_run": 200
+}
