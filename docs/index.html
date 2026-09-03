@@ -46,7 +46,7 @@
 <body>
 <header>
   <h1>Official stock trade filings</h1>
-  <p class="sub">Periodic Transaction Reports filed with the Clerk of the House, pulled from the Clerk's public index. Last updated <b>Sep 03, 2026 17:09 UTC</b>. A trade can be filed up to 45 days after it happened; the filing date is when the public could first see it.</p>
+  <p class="sub">Periodic Transaction Reports filed with the Clerk of the House, pulled from the Clerk's public index. Last updated <b>Sep 03, 2026 18:38 UTC</b>. A trade can be filed up to 45 days after it happened; the filing date is when the public could first see it.</p>
 </header>
 <div class="controls">
   <label>Minimum amount (low end of range)
@@ -91,7 +91,7 @@
   </table>
   <div class="empty" id="empty" hidden>No filings match these filters.</div>
 </div>
-<script id="data" type="application/json">[{"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Dependent child", "asset": "iShares Core S&P 500 ETF", "ticker": "IVV", "asset_type": "EF", "tx_type": "Buy", "tx_date": "2026-01-10", "notified_date": "2026-01-12", "amount_low": 1001, "amount_high": 15000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}, {"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Self", "asset": "Microsoft Corporation", "ticker": "MSFT", "asset_type": "ST", "tx_type": "Sell (partial)", "tx_date": "2026-01-03", "notified_date": "2026-01-05", "amount_low": 15001, "amount_high": 50000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}, {"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Spouse", "asset": "NVIDIA Corporation - Common Stock", "ticker": "NVDA", "asset_type": "ST", "tx_type": "Sell", "tx_date": "2025-12-22", "notified_date": "2025-12-22", "amount_low": 500001, "amount_high": 1000000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}, {"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Spouse", "asset": "Apple Inc. - Common Stock", "ticker": "AAPL", "asset_type": "ST", "tx_type": "Buy", "tx_date": "2025-12-22", "notified_date": "2025-12-22", "amount_low": 1000001, "amount_high": 5000000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}]</script>
+<script id="data" type="application/json">[]</script>
 <script>
 const rows = JSON.parse(document.getElementById('data').textContent);
 const $ = id => document.getElementById(id);
