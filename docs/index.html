@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Official stock trade filings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F8; --ink:#1B2432; --muted:#5B6675; --line:#D5DBE3;
+    --buy:#146C4A; --buy-bg:#DDF2E8; --sell:#9A2F1F; --sell-bg:#F8E1DB; --other:#4A5566; --other-bg:#E4E8EE;
+    --focus:#1F4FD1;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.45 "Public Sans",system-ui,sans-serif}
+  header{padding:28px 20px 14px;max-width:1180px;margin:0 auto}
+  h1{font-size:26px;font-weight:700;letter-spacing:-0.01em;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0;max-width:70ch}
+  .sub b{color:var(--ink);font-weight:600}
+  .controls{max-width:1180px;margin:0 auto;padding:0 20px 14px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end}
+  label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+  input,select{font:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:6px;padding:7px 9px;min-width:150px}
+  input:focus,select:focus,button:focus{outline:2px solid var(--focus);outline-offset:1px}
+  button{font:inherit;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 12px;cursor:pointer}
+  .count{margin-left:auto;color:var(--muted);font-size:13px;align-self:center}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 40px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  th,td{padding:9px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  th{font-size:12px;font-weight:600;color:var(--muted);background:#FAFBFC;position:sticky;top:0;cursor:pointer;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td.amt{white-space:nowrap;font-variant-numeric:tabular-nums}
+  td.who{font-weight:600}
+  td.who small{display:block;font-weight:400;color:var(--muted)}
+  .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+  .Buy{color:var(--buy);background:var(--buy-bg)}
+  .Sell,.Sellpartial{color:var(--sell);background:var(--sell-bg)}
+  .Exchange{color:var(--other);background:var(--other-bg)}
+  .big td{background:#FFF9E8}
+  a{color:var(--ink)}
+  .empty{padding:40px;text-align:center;color:var(--muted)}
+  @media (max-width:640px){ th:nth-child(6),td:nth-child(6){display:none} }
+  @media (prefers-reduced-motion:no-preference){ tr{transition:background .15s} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Official stock trade filings</h1>
+  <p class="sub">Periodic Transaction Reports filed with the Clerk of the House, pulled from the Clerk's public index. Last updated <b>Sep 03, 2026 17:09 UTC</b>. A trade can be filed up to 45 days after it happened; the filing date is when the public could first see it.</p>
+</header>
+<div class="controls">
+  <label>Minimum amount (low end of range)
+    <select id="minAmt">
+      <option value="0">Any amount</option>
+      <option value="15001">$15,001 and up</option>
+      <option value="50001" selected>$50,001 and up</option>
+      <option value="100001">$100,001 and up</option>
+      <option value="250001">$250,001 and up</option>
+      <option value="500001">$500,001 and up</option>
+      <option value="1000001">$1,000,001 and up</option>
+    </select>
+  </label>
+  <label>Type
+    <select id="type"><option value="">All</option><option>Buy</option><option>Sell</option><option>Exchange</option></select>
+  </label>
+  <label>Source
+    <select id="source"><option value="">All</option><option>House</option><option>Senate</option><option>Executive</option></select>
+  </label>
+  <label>Filed on or after
+    <input type="date" id="since">
+  </label>
+  <label>Search name or ticker
+    <input type="search" id="q" placeholder="e.g. NVDA or a last name">
+  </label>
+  <button id="reset">Clear filters</button>
+  <span class="count" id="count"></span>
+</div>
+<div class="wrap">
+  <table id="t">
+    <thead><tr>
+      <th data-k="filing_date">Filed</th>
+      <th data-k="filer">Filer</th>
+      <th data-k="ticker">Asset</th>
+      <th data-k="tx_type">Type</th>
+      <th data-k="amount_low">Amount</th>
+      <th data-k="tx_date">Traded</th>
+      <th data-k="owner">Owner</th>
+      <th>Filing</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="empty" id="empty" hidden>No filings match these filters.</div>
+</div>
+<script id="data" type="application/json">[{"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Dependent child", "asset": "iShares Core S&P 500 ETF", "ticker": "IVV", "asset_type": "EF", "tx_type": "Buy", "tx_date": "2026-01-10", "notified_date": "2026-01-12", "amount_low": 1001, "amount_high": 15000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}, {"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Self", "asset": "Microsoft Corporation", "ticker": "MSFT", "asset_type": "ST", "tx_type": "Sell (partial)", "tx_date": "2026-01-03", "notified_date": "2026-01-05", "amount_low": 15001, "amount_high": 50000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}, {"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Spouse", "asset": "NVIDIA Corporation - Common Stock", "ticker": "NVDA", "asset_type": "ST", "tx_type": "Sell", "tx_date": "2025-12-22", "notified_date": "2025-12-22", "amount_low": 500001, "amount_high": 1000000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}, {"source": "House", "filer": "Hon. Jane Q. Example", "state_district": "NJ08", "owner": "Spouse", "asset": "Apple Inc. - Common Stock", "ticker": "AAPL", "asset_type": "ST", "tx_type": "Buy", "tx_date": "2025-12-22", "notified_date": "2025-12-22", "amount_low": 1000001, "amount_high": 5000000, "filing_date": "2026-01-14", "doc_id": "TEST1", "doc_url": "https://example.invalid/TEST1.pdf", "collected_at": "2026-09-03T00:00:00Z"}]</script>
+<script>
+const rows = JSON.parse(document.getElementById('data').textContent);
+const $ = id => document.getElementById(id);
+let sortKey = 'filing_date', sortDir = -1;
+const fmt = n => '$' + Number(n).toLocaleString('en-US');
+function apply(){
+  const min = +$('minAmt').value, type = $('type').value, src = $('source').value,
+        since = $('since').value, q = $('q').value.trim().toLowerCase();
+  let out = rows.filter(r => r.amount_low >= min
+    && (!type || (r.tx_type||'').startsWith(type))
+    && (!src || r.source === src)
+    && (!since || (r.filing_date||'') >= since)
+    && (!q || (r.filer||'').toLowerCase().includes(q) || (r.ticker||'').toLowerCase().includes(q) || (r.asset||'').toLowerCase().includes(q)));
+  out.sort((a,b)=> ((a[sortKey]??'') > (b[sortKey]??'') ? 1 : (a[sortKey]??'') < (b[sortKey]??'') ? -1 : 0) * sortDir);
+  const tb = $('t').querySelector('tbody'); tb.innerHTML = '';
+  for (const r of out){
+    const tr = document.createElement('tr');
+    if (r.amount_low >= 250001) tr.className = 'big';
+    tr.innerHTML = `<td>${r.filing_date||''}</td>
+      <td class="who">${esc(r.filer)}<small>${esc(r.source)} ${esc(r.state_district||'')}</small></td>
+      <td>${r.ticker ? '<b>'+esc(r.ticker)+'</b><br>' : ''}${esc(r.asset)}</td>
+      <td><span class="tag ${(r.tx_type||'').replace(/[^A-Za-z]/g,'')}">${esc(r.tx_type)}</span></td>
+      <td class="amt">${fmt(r.amount_low)} to ${fmt(r.amount_high)}</td>
+      <td>${r.tx_date||''}</td>
+      <td>${esc(r.owner)}</td>
+      <td><a href="${r.doc_url}" target="_blank" rel="noopener">PDF</a></td>`;
+    tb.appendChild(tr);
+  }
+  $('count').textContent = out.length + ' of ' + rows.length + ' transactions';
+  $('empty').hidden = out.length > 0;
+}
+function esc(s){ return String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+for (const id of ['minAmt','type','source','since','q']) $(id).addEventListener('input', apply);
+$('reset').onclick = () => { $('minAmt').value='0'; $('type').value=''; $('source').value=''; $('since').value=''; $('q').value=''; apply(); };
+document.querySelectorAll('th[data-k]').forEach(th => th.onclick = () => { const k = th.dataset.k; sortDir = (k===sortKey) ? -sortDir : -1; sortKey = k; apply(); });
+apply();
+</script>
+</body>
+</html>

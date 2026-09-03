@@ -2,8 +2,8 @@ name: Collect trade filings
 
 on:
   schedule:
-    - cron: "15 */3 * * *"
-  workflow_dispatch:
+    - cron: "15 */3 * * *"   # every 3 hours (UTC)
+  workflow_dispatch:         # lets you run it manually from the Actions tab
 
 permissions:
   contents: write
